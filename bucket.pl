@@ -68,7 +68,7 @@ my $channel =
   : ( &config("control_channel") || "#billygoat" );
 our ($irc) = POE::Component::IRC::State->spawn();
 my %channels = ( $channel => 1 );
-my $mainchannel = &config("main_channel") || "#xkcd";
+my $mainchannel = &config("main_channel") || "#km";
 my %_talking;
 my %fcache;
 my %stats;
@@ -1271,7 +1271,7 @@ sub irc_on_public {
             &say(
                 $chl => "$bag{who}: Grammatically, I refer to you as",
                 $stats{users}{genders}{lc $bag{who}} . ".  See",
-                "http://wiki.xkcd.com/irc/Bucket#Docs for information on",
+                "https://github.com/spinza/CTWUG-Bucket for information on",
                 "setting this."
             );
 

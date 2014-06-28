@@ -1,10 +1,10 @@
-xkcd-Bucket
+CTWUG-Bucket
 ===========
 
-Bucket is one of three bots in [xkcd's](http://xkcd.com) IRC Channel.
+Bucket is one of the bots on [CTWUG](http://www.ctwug.za.net) IRC Channels.
 The source is available here, which includes a sample database with a minimal configuration.
 
-The full database is not publicly available.
+The bot was copied from xkcd-Bucket.  Some of the links below reference the original documentation. 
 
 What is Bucket?
 ---------------
@@ -139,6 +139,5 @@ Bucket also has some factoids for hard-coded uses. These include "Don't Know", "
 
 #### Contacting
 
-Any bugs, feature requests or questions should be directed to zigdon at
-irc.foonetic.net.  Or, ask people in #xkcd and #bucket there - many have years
-of experience with Bucket.
+Any bugs, feature requests or questions should be directed to spin at
+irc.ctwug.za.net.  Or, ask people on #bucket there.
