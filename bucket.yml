@@ -1,30 +1,29 @@
 ---
-autoload_plugins: quotes topic
+autoload_plugins: quotes topic metabutterfly squirrel bananas
 plugin_dir: plugins
 autojoin:
   '#bucket': 1
-  '#xkcd': 1
   '#bots': 1
-db_dsn: DBI:mysql:database=dbname;host=db.example.com
-db_password: SekritAwesome
-db_username: DBUsername
+  '#bitcoin': 1
+  '#km': 1
+db_dsn: DBI:mysql:database=bucket;host=xxx
+db_password: xxx
+db_username: bucket
 hide_hostmask: 0
-password: NickservPassword
-logfile: /path/to/log/file
-logchannel: #logChannel
-control_channel: #InviteOnlyChannel
+password: xxx
+logfile: /xxx/bucket.log
+logchannel: #bucket-log
+control_channel: #bucket-config
 identify_before_autojoin: 1
-main_channel: #xkcd
-nick: bucketClone
+main_channel: #km
+nick: bucket
 nickserv_msg: ''
 nickserv_nick: 'NickServ'
 user_mode: '+B'
-bucketlog: /path/to/external/log
+bucketlog: /xxx/bucket-external.log
 timeout: 60
-server: irc.example.com
+server: irc.ctwug.za.net
 ignore:
-  billygoat: 1
-  flyingferret: 1
-
-
-
+  bottie: 1
+  flea: 1
+  irbot: 1
