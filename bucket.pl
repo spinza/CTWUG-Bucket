@@ -94,7 +94,7 @@ my %config_keys = (
     item_drop_rate           => [ i => 3 ],
     lookup_tla               => [ i => 10 ],
     max_sub_length           => [ i => 80 ],
-    minimum_length           => [ i => 6 ],
+    minimum_length           => [ i => 3 ],
     random_exclude_verbs     => [ s => '<reply>,<action>' ],
     random_item_cache_size   => [ i => 20 ],
     random_wait              => [ i => 3 ],
