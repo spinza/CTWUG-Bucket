@@ -2,7 +2,6 @@
 
 use BucketBase qw/say say_long Log Report config save post/;
 use DBI;
-
 #$lastalertcheck=time();
 
 
@@ -96,6 +95,68 @@ sub ports_down {
         $dbh->disconnect;
 }
 
+sub uptime_best {
+        my $bag = shift;
+
+        my $dbh = DBI->connect(config("db_observium_dsn"),config("db_observium_username"),config("db_observium_password"))
+                or die "Couldn't connect to database: " . DBI->errstr;
+        my $sth = $dbh->prepare("
+				select devices.device_id, hostname, round(devices.uptime/60/60/24,1) as days
+				from devices 
+				where devices.ignore=0
+				order by uptime desc
+				limit 3;
+				")
+                or die "Couldn't prepare statement: " . $dbh->errstr;
+        $sth->execute()  
+            or die "Couldn't execute statement: " . $sth->errstr;
+        my @data;
+        my $count = 0;
+        while (@data = $sth->fetchrow_array()) {
+            my $device_id= $data[0];
+            my $hostname = $data[1];
+            my $days = $data[2];
+            $count=$count+1;
+                &say( $bag->{chl} =>
+                        "$count. $hostname | $days days| http://observium.bath.ctwug.za.net/graphs/type=device_uptime/device=$device_id/")
+            
+          
+        }
+        $sth->finish;
+        $dbh->disconnect;
+}
+
+sub uptime_worst {
+        my $bag = shift;
+
+        my $dbh = DBI->connect(config("db_observium_dsn"),config("db_observium_username"),config("db_observium_password"))
+                or die "Couldn't connect to database: " . DBI->errstr;
+        my $sth = $dbh->prepare("
+				select devices.device_id, hostname, round(devices.uptime/60) as minutes
+				from devices 
+				where devices.ignore=0
+				order by uptime asc
+				limit 3;
+				")
+                or die "Couldn't prepare statement: " . $dbh->errstr;
+        $sth->execute()  
+            or die "Couldn't execute statement: " . $sth->errstr;
+        my @data;
+        my $count = 0;
+        while (@data = $sth->fetchrow_array()) {
+            my $device_id= $data[0];
+            my $hostname = $data[1];
+            my $minutes = $data[2];
+            $count=$count+1;
+                &say( $bag->{chl} =>
+                        "$count. $hostname | $minutes minutes | http://observium.bath.ctwug.za.net/graphs/type=device_uptime/device=$device_id/")
+            
+          
+        }
+        $sth->finish;
+        $dbh->disconnect;
+}
+
 
 sub commands {
     return (
@@ -114,6 +175,22 @@ sub commands {
             editable  => 0,
             re        => qr/^ports down/i,
             callback  => \&ports_down
+        },
+        {
+            label     => 'uptime best',
+            addressed => 1,
+            operator  => 0,
+            editable  => 0,
+            re        => qr/^uptime best/i,
+            callback  => \&uptime_best
+        },
+        {
+            label     => 'uptime worst',
+            addressed => 1,
+            operator  => 0,
+            editable  => 0,
+            re        => qr/^uptime worst/i,
+            callback  => \&uptime_worst
         },
     );
 }
