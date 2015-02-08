@@ -206,7 +206,31 @@ sub settings {
 
 sub route {
     my ( $package, $sig, $data ) = @_;
-
+	
 
     return 0;
 }
+
+
+=for comment 
+
+
+use observium;
+
+select 
+	devices.hostname
+	,devices.device_id
+	,devices.status as device_status
+	,devices.ignore
+	,TIMESTAMPDIFF(minute,devices.last_polled,now()) as lastpollmin
+	,alerts_bucket_devices.device_status as device_status_old
+	,alerts_bucket_devices.modifiedtimestamp
+	,concat(hostname,' is ',case when devices.status=1 then 'UP' else 'DOWN' end ,' since ',devices.last_polled,'! | http://observium.bath.ctwug.za.net/device/device=',devices.device_id,'/') as message
+from
+	devices
+	left join 
+		alerts_bucket_devices
+		on devices.device_id=alerts_bucket_devices.device_id
+
+
+=cut
