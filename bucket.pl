@@ -1312,7 +1312,7 @@ sub irc_on_public {
         $bag{msg} = &trim( $bag{msg} );
         if (   $addressed
             or length $bag{msg} >= &config("minimum_length")
-            or $bag{msg} eq '...' )
+            or $bag{msg} eq '...' or $bag{msg} eq '…' )
         {
             if ( $addressed and length $bag{msg} == 0 ) {
                 $bag{msg} = $nick;
@@ -1452,8 +1452,8 @@ sub db_success {
             } elsif ( $line{verb} eq '<action>' ) {
                 &do( $bag{chl} => $line{tidbit} );
             } else {
-                if ( lc $bag{msg} eq 'bucket' and lc $line{verb} eq 'is' ) {
-                    $bag{orig}   = 'I';
+                if ( lc $bag{msg} eq lc $nick and lc $line{verb} eq 'is' ) {
+                    $bag{msg}   = 'I';
                     $line{verb} = 'am';
                 }
                 &say( $bag{chl} => "$bag{msg} $line{verb} $line{tidbit}" );
@@ -2388,9 +2388,11 @@ sub irc_start {
             Ircname  => &config("irc_name") || "YABI",
             Server   => &config("server") || "irc.foonetic.net",
             Port     => &config("port") || "6667",
+            Password => &config("server_pass") || "",
             Flood    => 0,
             UseSSL   => &config("ssl") || 0,
-            useipv6  => &config("ipv6") || 0
+            useipv6  => &config("ipv6") || 0,
+            LocalAddr => &config("local_address")
         }
     );
 
@@ -3061,6 +3063,12 @@ sub expand {
         my $cased = &set_case( $1, $who );
         last unless $msg =~ s/(?<!\\)(?:\$who\b|\${who})/$cased/i;
         $stats{last_vars}{$chl}{who} = $who;
+    }
+
+    while ( $msg =~ /(?<!\\)(\$channel\b|\${channel})/i ) {
+        my $cased = &set_case( $1, $chl );
+        last unless $msg =~ s/(?<!\\)(?:\$channel\b|\${channel})/$cased/i;
+        $stats{last_vars}{$chl}{channel} = $chl;
     }
 
     if ( $msg =~ /(?<!\\)(?:\$someone\b|\${someone})/i ) {
